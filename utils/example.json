@@ -1,0 +1,9 @@
+{
+    "email": "sal.bozhadze@mailfence.com",
+    "fileName" : "example.txt",
+    "filePath" : "/Users/macbookair/CypressLearning/cypress/fixtures",
+    "fileContent" : "This is the content of the .txt file",
+    "mailtext" : "Hello, it is mail",
+    "productName" : ["Blackberry", "Nokia Edge"]
+  }
+  
