@@ -8,6 +8,10 @@ class LoginPage {
     }
   
     async validLogin(username, password) {
+      /**
+       * There is no need to use `await` for page.locator invocations.
+       * See this article regarding usage of locators: https://playwright.dev/docs/handles#locator-vs-elementhandle
+       */
       const signInButton = await this.page.locator('#signin');
       const emailField = await this.page.locator('#UserID');
       const passwordField = await this.page.locator('#Password');
