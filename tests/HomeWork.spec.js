@@ -6,6 +6,13 @@ const {LoginPage} = require('../pageobjects/LoginPage');
 const {DocumentPage} = require('../pageobjects/DocumentPage');
 const {MailPage} = require('../pageobjects/MailPage');
 
+  /**
+   * There is no need to use `only` when you have a single test. 
+   * 
+   * This would make sense if you would have several tests in file.
+   * But take into consideration next [option](https://playwright.dev/docs/api/class-testconfig#test-config-forbid-only) in config.
+   * This helps to avoid situation when you forget to remove `only`
+   */
   test.only('Login To Mail', async ({browser}) => 
   {
     
@@ -13,9 +20,18 @@ const {MailPage} = require('../pageobjects/MailPage');
 
     console.log('Before hook started');
     data = await import('../utils/example.json');
-    console.log('Fixture loaded:', data);
+    /**
+     * Its better to use `JSON.stringify(data,null," ")` instead simple `data`,
+     * since you're having `[Object null: prototype]...` in logs
+     */
+    console.log('Fixture loaded:', JSON.stringify(data,null," "));
     console.log('Before hook completed');
 
+    /**
+     * `context` and `browser` usually no need to invoke and create,
+     * since you can get `page` from destructing `test` variable.
+     * See example [here](https://playwright.dev/docs/writing-tests#first-test)
+     */
     const context = await browser.newContext();
     const page = await context.newPage();
 
