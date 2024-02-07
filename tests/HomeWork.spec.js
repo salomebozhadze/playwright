@@ -35,10 +35,19 @@ const {MailPage} = require('../pageobjects/MailPage');
     const context = await browser.newContext();
     const page = await context.newPage();
 
+    /**
+     * creation of page object can be setup in [hooks](https://playwright.dev/docs/writing-tests#using-test-hooks)
+     * this will make tests more clear since we're going to have logic of test only
+     */
     const loginPage = new LoginPage(page);
     const mailPage = new MailPage(page);
     const documentPage = new DocumentPage(page);
 
+
+    /**
+     * Invocation of environmental variables better to move to [test-use-option](https://playwright.dev/docs/test-use-options) 
+     * or in separate function in `utils`. 
+     */
     const username = process.env.USERNAME;
     const password = process.env.PASSWORD;
 
@@ -47,7 +56,11 @@ const {MailPage} = require('../pageobjects/MailPage');
     // Open site and login
    
     await loginPage.validLogin(username, password);
-  
+    
+    /**
+     * It's better not use `waitForTimeout` without urgent need. Sometimes, it can be useful to emulate delay,
+     * but overall if you'd like to wait for some element state - use `page.waitForLocator` method
+     */
     await page.waitForTimeout(2000); 
     await documentPage.clickDocumentTab();
 
@@ -69,6 +82,11 @@ const {MailPage} = require('../pageobjects/MailPage');
     await mailPage.fillEmailField(data.email);
     await mailPage.getSubjectField.type(data.mailtext);
     await page.waitForTimeout(3000)
+    /**
+     * In async assertions - it's better to "await" `expect` rather 
+     * than await for some state inside `expect`.
+     * See example here - https://playwright.dev/docs/test-assertions#introduction
+     */
     expect(await mailPage.getAttachment.isVisible()).toBe(true);
     await mailPage.getMailSendButton.click();
 
@@ -78,6 +96,11 @@ const {MailPage} = require('../pageobjects/MailPage');
     await mailPage.getRefreshMail.click();
     await mailPage.getMailTitle.click();
     await page.waitForTimeout(3000)
+    /**
+     * It's usually nice to have custom assertion message in `expect`, 
+     * which will indicate more concise error message.
+     * See example here https://playwright.dev/docs/test-assertions#custom-expect-message 
+     */
     expect(await mailPage.getAttachment.isVisible()).toBe(true);
     await page.waitForTimeout(5000)
     await mailPage.getAttachment.hover();
@@ -120,6 +143,10 @@ const {MailPage} = require('../pageobjects/MailPage');
 
     expect(await mailPage.getEmptyMailText.isVisible()).toBe(true);
 
+    /**
+     * There is no need at all to use `browser` instance at all inside `test` object
+     * since Playwright Test handles browser termination  automatically 
+     */
     // Close the browser
     await browser.close();
   });
