@@ -13,6 +13,10 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Login To Mail', async ({ page }) => {
+  /**
+   * You could try to move all the data setup to beforeEach hook,
+   * this will make test much cleaner.
+   */
   let data;
 
   console.log('Before hook started');
@@ -52,6 +56,13 @@ test('Login To Mail', async ({ page }) => {
   await mailPage.getRefreshMail.click();
   await mailPage.getRefreshMail.click();
   await mailPage.getMailTitle.click();
+  /**
+   * You can try to use [expect.poll](https://playwright.dev/docs/test-assertions#expectpoll).
+   * This method allows you wait until specific code return expected value.
+   * 
+   * Of course, you can face with timeout expiration, but this approach is more flaky-resistant,
+   * than `waitForTimeout`.
+   */
   await page.waitForTimeout(3000);
   await expect(mailPage.getAttachment, 'Attachment should be Visible').toBeVisible();
   await mailPage.getAttachment.hover();
