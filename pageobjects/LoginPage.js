@@ -4,9 +4,7 @@ class LoginPage {
 
     constructor(page) {
       this.page = page;
-      this.timeout = 5000; // Timeout for waiting
-      
-      // Define locators
+      this.timeout = 5000;
       this.signInButton = this.page.locator('#signin');
       this.emailField = this.page.locator('#UserID');
       this.passwordField = this.page.locator('#Password');

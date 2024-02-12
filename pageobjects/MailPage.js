@@ -3,8 +3,6 @@ const { expect } = require('playwright');
 class MailPage {
     constructor(page) {
       this.page = page;
-
-      // Define locators
       this.getSuggestEmail = page.locator('.GCSDBRWBCM > a');
       this.getSubjectField = page.locator('#mailSubject');
       this.getAttachment = page.locator('text=example.txt');
