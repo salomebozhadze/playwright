@@ -5,6 +5,13 @@ class DocumentPage {
     this.page = page;
     this.timeout = 8000;
 
+    /**
+     * It's good that you put initialization of locators in constructor, 
+     * but sometimes there can be too much to initialize (4 and more properties).
+     * 
+     * I suggest you to use [Page Element](https://www.selenium.dev/documentation/test_practices/encouraged/page_object_models/#page-component-objects) 
+     * pattern in order to extract some of the parts of complex page.
+     */
     // Define locators
     this.getDocumentTab = page.locator('.icon24-Documents');
     this.getUploadDocumentCheckBox = page.locator('.checkIcon');
@@ -21,6 +28,7 @@ class DocumentPage {
     this.trash = page.locator('#doc_tree_trash');
     this.table = page.locator("xpath=//table[contains(@class, 'GCSDBRWBBU')]");
 
+    // note: if this method used only in `DocumentPage` - you can make it private in this class
     // Function to wait for locator
     this.waitForLocatorWithOptions = async (locator, options) => {
       return await locator.waitFor({ state: 'visible', timeout: this.timeout, ...options });
@@ -28,6 +36,9 @@ class DocumentPage {
   }
 
   async clickDocumentTab() {
+    // note: Playwright has a nice API for indicating test steps  - https://playwright.dev/docs/api/class-test#test-step
+    // So you can wrap all the comments into latter method which will be revealed in test report. 
+
     // Wait for the document tab to be visible
     await this.waitForLocatorWithOptions(this.getDocumentTab);
 
