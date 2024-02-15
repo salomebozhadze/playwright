@@ -2,6 +2,11 @@ const { test, expect } = require('@playwright/test');
 
 class LoginPage {
 
+  /**
+     * Creates an instance of DocumentPage.
+     * @param {import('@playwright/test').Page} page - The Playwright page object.
+     */
+
     constructor(page) {
       this.page = page;
       this.timeout = 5000;
@@ -11,6 +16,10 @@ class LoginPage {
       this.loginButton = this.page.locator('.btn');
     }
   
+     /**
+     * Login on site
+     * @returns {Promise<void>}
+     */
     async validLogin(username, password) {
       // Navigate to the login page
       await this.page.goto('https://mailfence.com/');

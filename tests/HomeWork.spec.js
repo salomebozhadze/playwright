@@ -35,10 +35,9 @@ test('Login To Mail', async ({ page }) => {
   await test.step('Navigate to the document page', async () => 
   {
     await documentPage.clickDocumentTab();
-    if (await documentPage.getDocument.isVisible()) {
+    if (!(await documentPage.emptyDocumenttext.isVisible())) {
       await documentPage.clickCheckBoxAll();
       await documentPage.clickDeleteLink();
-      await page.waitForTimeout(3000);
       await documentPage.visibleEmptyDocumentText();
     } else {
       console.log("No mail to delete, inbox is empty.");
@@ -75,45 +74,38 @@ test('Login To Mail', async ({ page }) => {
     await mailPage.getRefreshMail.click();
     await mailPage.getRefreshMail.click();
     await mailPage.getMailTitle.click();
-    await page.waitForTimeout(3000);
+    await mailPage.visibleAttachment();
     await expect(mailPage.getAttachment, 'Attachment should be Visible').toBeVisible();
     await mailPage.getAttachment.hover();
     await mailPage.getAttachmentArrow.click();
     await mailPage.getSaveLink.click();
     await mailPage.getDocumentFolder.click();
     await page.waitForTimeout(2000);
-    await mailPage.getSaveButton.click();
+    await mailPage.clickSaveButton();
   });
 
   await test.step('Check mail is saved in documents', async () => 
   {
     await documentPage.clickDocumentTab();
-    await page.waitForTimeout(2000);
     await documentPage.visibleSavedDocument();
-    await page.waitForTimeout(5000);
   });
 
   await test.step('Drag and drop document', async () => 
   {
     await documentPage.dragAndDropDocument();
     await documentPage.clickCheckBoxAll();
-    await page.waitForTimeout(5000);
     await documentPage.dragAndDrop();
-    await page.waitForTimeout(2000);
     await documentPage.visibleEmptyDocumentText();
   });
 
   await test.step('Check document is in trash', async () => 
   {
-    await page.waitForTimeout(2000);
     await documentPage.clickTrash();
-    await page.waitForTimeout(3000);
     await documentPage.visibleDocument();
     await documentPage.visibleSavedDocument();
     await documentPage.clickCheckBoxAll();
     await documentPage.clickDeleteLink();
     await documentPage.clickConfirmDeleteBtn();
-    await page.waitForTimeout(3000);
     await documentPage.visibleEmptyDocumentText();
   });
 
@@ -121,7 +113,6 @@ test('Login To Mail', async ({ page }) => {
   {
     await mailPage.getMailIcon.click();
   await mailPage.getDeleteIcon.click();
-  await page.waitForTimeout(3000);
 
   await expect(mailPage.getEmptyMailText, 'Empty Mail Text should be Visible').toBeVisible();
 

@@ -12,19 +12,19 @@ class HomePage {
     }
 
     async getTwoWayDataBunding() {
-      return await this.waitFor(':nth-child(4) > .ng-untouched');
+      return await this.page.locator(':nth-child(4) > .ng-untouched').waitFor();
     };
 
     async getSelect() {
-      return await this.waitFor('select');
+      return await this.page.locator('select').waitFor();
     };
 
     async getEnterPrenaun() {
-      return await this.waitFor('#inlineRadio3');
+      return await this.page.locator('#inlineRadio3').waitFor();
     };
 
     async getShopTab() {
-      return await this.waitFor(':nth-child(2) > .nav-link');
+      return await this.page.locator(':nth-child(2) > .nav-link').waitFor();
     };
 }
 
