@@ -22,8 +22,9 @@ test.beforeEach(async ({ page }) => {
   if (!(await mailPage.getEmptyMailText.isVisible())) {
     await documentPage.clickCheckBoxAll();
     await mailPage.getDeleteIcon.click();
-    await page.waitForTimeout(3000);
-    await expect(mailPage.getEmptyMailText, 'Empty Mail Text should be Visible').toBeVisible();
+    await expect(mailPage.getEmptyMailText, 'Empty Mail Text should be Visible').toBeVisible({
+      timeout: 10000
+    });
   } else {
     console.log("No mail to delete, inbox is empty.");
   }
