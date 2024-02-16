@@ -115,8 +115,7 @@ class DocumentPage {
      * @returns {Promise<void>}
      */
     async visibleDocument() {
-      const getDocument = this.page.locator("text=example.txt");
-      getDocument.waitFor({ state: 'visible', timeout: this.timeout });
+      const getDocument = this.page.locator("text=example.txt").last();
 
       await expect(getDocument).toBeVisible();
     }
@@ -126,8 +125,7 @@ class DocumentPage {
      * @returns {Promise<void>}
      */
     async visibleSavedDocument() {
-      const getSavedDocument = this.page.locator("text=example_1.txt");
-      getSavedDocument.waitFor({ state: 'visible', timeout: this.timeout });
+      const getSavedDocument = this.page.locator("text=example_1.txt").last();
       await expect(getSavedDocument).toBeVisible();
     }
 
