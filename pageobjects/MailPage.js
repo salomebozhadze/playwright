@@ -55,7 +55,6 @@ class MailPage {
      */
     async clickSaveButton() {
       const saveButton = this.page.locator('#dialBtn_OK');
-      await saveButton.waitFor({ state: 'visible', timeout: 5000 });
       await expect(saveButton, 'button should be Visible').toBeVisible();
       await saveButton.click();
   
