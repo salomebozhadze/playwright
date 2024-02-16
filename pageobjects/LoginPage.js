@@ -35,10 +35,8 @@ class LoginPage {
       
       // Fill the email field
       await this.emailField.fill(username);
-      
-      // Wait for the password field to be visible
-      await this.passwordField.waitFor({ state: 'visible', timeout: this.timeout });
-      
+            
+      await this.passwordField.focus();
       // Fill the password field
       await this.passwordField.fill(password);
       
