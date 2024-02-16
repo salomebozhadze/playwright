@@ -86,7 +86,7 @@ class DocumentPage {
      */
   async clickTrash() {
     const getTrash = this.page.locator('#doc_tree_trash');
-    getTrash.waitFor({ state: 'visible', timeout: this.timeout });
+    await getTrash.waitFor({ state: 'visible', timeout: this.timeout });
     await getTrash.click();
   }
 
@@ -96,7 +96,7 @@ class DocumentPage {
      */
   async clickDeleteLink() {
     const getDeleteLink = this.page.locator("xpath=.//div[text()='Delete']");
-    getDeleteLink.waitFor({ state: 'visible', timeout: this.timeout });
+    await getDeleteLink.waitFor({ state: 'visible', timeout: this.timeout });
     await getDeleteLink.click();
   }
 
@@ -106,7 +106,7 @@ class DocumentPage {
      */
   async clickConfirmDeleteBtn() {
     const getConfirmDeleteBtn = this.page.locator('#dialBtn_YES > .btnCtn');
-    getConfirmDeleteBtn.waitFor({ state: 'visible', timeout: this.timeout });
+    await getConfirmDeleteBtn.waitFor({ state: 'visible', timeout: this.timeout });
     await getConfirmDeleteBtn.click();
   }
 
@@ -137,7 +137,7 @@ class DocumentPage {
      */
     async visibleEmptyDocumentText() {
       const getEmptyDocumentText = this.page.locator('text=There are no documents in this folder yet');
-      getEmptyDocumentText.waitFor({ state: 'visible', timeout: this.timeout });
+      await getEmptyDocumentText.waitFor({ state: 'visible', timeout: this.timeout });
       await expect(getEmptyDocumentText).toBeVisible();
     }
   
@@ -147,7 +147,7 @@ class DocumentPage {
      */
     async dragAndDrop() {
       const getSavedDocument = this.page.locator("text=example_1.txt");
-      getSavedDocument.waitFor({ state: 'visible', timeout: this.timeout });
+      await getSavedDocument.waitFor({ state: 'visible', timeout: this.timeout });
       const trash = this.page.locator('#doc_tree_trash');
       await getSavedDocument.dragTo(trash);
     }
@@ -158,7 +158,7 @@ class DocumentPage {
      */
     async dragAndDropDocument() {
       const getDocument = this.page.locator("text=example.txt");
-      getDocument.waitFor({ state: 'visible', timeout: this.timeout });
+      await getDocument.waitFor({ state: 'visible', timeout: this.timeout });
 
       const trash = this.page.locator('#doc_tree_trash');
       await getDocument.dragTo(trash);
