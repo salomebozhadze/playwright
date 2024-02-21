@@ -2,80 +2,175 @@ const {test, expect} = require('@playwright/test');
 
 class DocumentPage {
 
+  /**
+     * Creates an instance of DocumentPage.
+     * @param {import('@playwright/test').Page} page - The Playwright page object.
+     */
+
     constructor(page) {
       this.page = page;
-      this.getDocumentTab = page.locator('.icon24-Documents', { state: 'visible', timeout: 5000 });
-      this.getUploadDocumentCheckBox = page.locator('.checkIcon', { state: 'visible', timeout: 5000 });
-      this.getMoreLinks = page.locator('#toolbar_more div', { state: 'visible', timeout: 5000 });
-      this.getSendLink = page.locator('text=Send', { state: 'visible', timeout: 5000 });
-      this.getSendEmailLink = page.locator('text=Send by e-mail', { state: 'visible', timeout: 5000 });
-      this.getDocument = page.locator("text=example.txt", { state: 'visible', timeout: 8000 });
-      this.getTrash = page.locator('#doc_tree_trash', { state: 'visible', timeout: 5000 });
-      this.getSavedDocument = page.locator("text=example_1.txt", { state: 'visible', timeout: 8000 });
-      this.getEmptyDocumentText = page.locator('text=There are no documents in this folder yet', { state: 'visible', timeout: 5000 });
-      this.getCheckBoxAll = page.locator('.icon.icon-checkb', { state: 'visible', timeout: 5000 });
-      this.getDeleteLink = page.locator("xpath=.//div[text()='Delete']", { state: 'visible', timeout: 5000 });
-      this.getConfirmDeleteBtn = page.locator('#dialBtn_YES > .btnCtn', { state: 'visible', timeout: 5000 });
-      this.trash = page.locator('#doc_tree_trash');
-      this.table =  page.locator("xpath=//table[contains(@class, 'GCSDBRWBBU')]", { state: 'visible', timeout: 5000 })
-
+      this.timeout = 9000; 
+      this.document = page.locator("text=example.txt");
+      this.emptyDocumenttext = page.locator('text=There are no documents in this folder yet');
     }
-  
-  
+
+    
+       /**
+     * Get a document title.
+     * @returns {Promise<void>}
+     */
+    async getDocument() {
+        return this.page.locator("text=example.txt").waitFor();
+    }
+
+
+
+       /**
+     * click Document tab at header
+     * @returns {Promise<void>}
+     */
     async clickDocumentTab() {
-      await this.getDocumentTab.click();
+      const getDocumentTab = this.page.locator('.icon24-Documents');
+      await getDocumentTab.click();
     }
 
-    async visibleDocument(){
-     expect(await this.getDocument).toBeVisible({timeout:10000});
+     /**
+     * Click upload document checkbox
+     * @returns {Promise<void>}
+     */
+    async clickUploadDocumentCheckBox() {
+      const getUploadDocumentCheckBox = this.page.locator('.checkIcon');
+      await getUploadDocumentCheckBox.click();
     }
 
-  //   async dragAndDropDocument(page) {
-  //     const sourceElement = this.getDocument;
-  //     const targetElement = this.trash;
-  
-  //     // Ensure both elements are valid before proceeding
-  //     if (!sourceElement || !targetElement) {
-  //         console.error("Invalid source or target element");
-  //         return;
-  //     }
-  
-  //     // Hover over the source element
-  //     await sourceElement.hover();
-  
-  //     // Trigger mouse down event
-  //     await page.mouse.down();
-  
-  //     // Hover over the target element
-  //     await targetElement.hover();
-  
-  //     // Trigger mouse up event
-  //     await page.mouse.up();
-  // }
 
-  //   async dragAndDropSavedDocument(page) {
-  //     await this.getSavedDocument.hover();
-  //     await page.mouse.down();
-  //     await this.trash.hover();
-  //     await page.mouse.up();
-  //   }
-
-
-  async dragAndDrop(){
-    await this.getSavedDocument.dragTo(this.trash);
-
+ /**
+     * Check all Checkbox
+     * @returns {Promise<void>}
+     */
+    async clickCheckBoxAll() {
+      const getCheckBoxAll = this.page.locator(".icon.icon-checkb");
+      await getCheckBoxAll.click();
   }
 
-    async dragAndDropDocument(){
-      await this.getDocument.dragTo(this.trash);
+   /**
+     * Click more link
+     * @returns {Promise<void>}
+     */
+  async clickMoreLinks() {
+    const getMoreLinks = this.page.locator('#toolbar_more div');
+    await getMoreLinks.click();
+  }
 
+   /**
+     * get send link hover
+     * @returns {Promise<void>}
+     */
+  async getSendLinkover() {
+    const getSendLink = this.page.locator('text=Send');
+    await getSendLink.hover();
+  }
+
+  /**
+     * Click send email link
+     * @returns {Promise<void>}
+     */
+  async clickSendEmailLink() {
+    const getSendEmailLink = this.page.locator('text=Send by e-mail');
+    await getSendEmailLink.click();
+  }
+
+  /**
+     * Click trash link
+     * @returns {Promise<void>}
+     */
+  async clickTrash() {
+    const getTrash = this.page.locator('#doc_tree_trash');
+    await getTrash.waitFor({ state: 'visible', timeout: this.timeout });
+    await getTrash.click();
+  }
+
+  /**
+     * Click confirm delete link
+     * @returns {Promise<void>}
+     */
+  async clickDeleteLink() {
+    const getDeleteLink = this.page.locator("xpath=.//div[text()='Delete']");
+    await getDeleteLink.waitFor({ state: 'visible', timeout: this.timeout });
+    await getDeleteLink.click();
+  }
+
+  /**
+     * Click confirm delete button
+     * @returns {Promise<void>}
+     */
+  async clickConfirmDeleteBtn() {
+    const getConfirmDeleteBtn = this.page.locator('#dialBtn_YES > .btnCtn');
+    await getConfirmDeleteBtn.waitFor({ state: 'visible', timeout: this.timeout });
+    await getConfirmDeleteBtn.click();
+  }
+
+  /**
+     * Checks if a document is visible.
+     * @returns {Promise<void>}
+     */
+    async visibleDocument() {
+      const getDocument = this.page.locator("text=example.txt").last();
+
+      await expect(getDocument).toBeVisible();
     }
 
-    async dragAndDropSavedDocument(){
-      await this.getSavedDocument.dragTo(this.trash);
+    /**
+     * Checks if a saved document is visible.
+     * @returns {Promise<void>}
+     */
+    async visibleSavedDocument() {
+      const getSavedDocument = this.page.locator("text=example_1.txt").last();
+      await expect(getSavedDocument).toBeVisible();
+    }
+
+    /**
+     * Checks if an empty document text is visible.
+     * @returns {Promise<void>}
+     */
+    async visibleEmptyDocumentText() {
+      const getEmptyDocumentText = this.page.locator('text=There are no documents in this folder yet');
+      await getEmptyDocumentText.waitFor({ state: 'visible', timeout: this.timeout });
+      await expect(getEmptyDocumentText).toBeVisible();
     }
   
-   
+     /**
+     * Drag and drop document
+     * @returns {Promise<void>}
+     */
+    async dragAndDrop() {
+      const getSavedDocument = this.page.locator("text=example_1.txt");
+      await getSavedDocument.waitFor({ state: 'visible', timeout: this.timeout });
+      const trash = this.page.locator('#doc_tree_trash');
+      await getSavedDocument.dragTo(trash);
+    }
+  
+     /**
+     * Drag and drop document
+     * @returns {Promise<void>}
+     */
+    async dragAndDropDocument() {
+      const getDocument = this.page.locator("text=example.txt");
+      await getDocument.waitFor({ state: 'visible', timeout: this.timeout });
+
+      const trash = this.page.locator('#doc_tree_trash');
+      await getDocument.dragTo(trash);
+    }
+  
+     /**
+     * Drag and drop saved document
+     * @returns {Promise<void>}
+     */
+    async dragAndDropSavedDocument() {
+      const getSavedDocument = this.page.locator("text=example_1.txt");
+      const trash = this.page.locator('#doc_tree_trash');
+      await getSavedDocument.dragTo(trash);
+    }
   }
   
   module.exports = {DocumentPage};

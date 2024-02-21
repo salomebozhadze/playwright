@@ -4,7 +4,7 @@ const { defineConfig, devices } = require('@playwright/test');
 const config = {
 
   testDir: './tests',
-  timeout: 50 * 10000,
+  timeout: process.env.DEBUG ? 50 * 10000 : 100 * 1000,
  
   expect:{
     timeout: 5000
