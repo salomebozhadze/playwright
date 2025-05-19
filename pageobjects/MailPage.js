@@ -1,65 +1,55 @@
-const {test, expect} = require('@playwright/test');
-
 class MailPage {
-  /**
-     * Creates an instance of DocumentPage.
-     * @param {import('@playwright/test').Page} page - The Playwright page object.
-     */
+  constructor(page) {
+    this.page = page;
+    this.composeBtn = page.getByRole('button', { name: 'Compose' });
+    this.toField = page.locator('input[aria-label="To recipients"]');
+    this.subjectField = page.locator('input[name="subjectbox"]');
+    this.attachmentInput = page.locator('input[type="file"]:not([disabled])');
+    this.sendBtn = page.locator('div[role="button"][aria-label^="Send"]').first();
+    this.attachment = page.locator('span.aV3', { hasText: 'example.txt' }).first();
+    this.emailRow = this.page.locator('tr[role="row"]', {
+      hasText: 'Test Email with Attachment'
+    }).first();
+    this.downloadedButton = this.page.getByRole('button', { name: 'Download attachment example.txt' })
+  }
+
+  async sendMailToSelf(email, filePath) {
+    await this.composeBtn.click();
+    await this.toField.fill(email);
+    await this.subjectField.fill('Test Email with Attachment');
+    await this.attachmentInput.setInputFiles(filePath);
+    await this.page.waitForTimeout(3000);
+    await this.sendBtn.click();
+    await this.page.waitForTimeout(3000);
+
+  }
+
+  async openReceivedEmail() {
+  await this.emailRow.waitFor({ state: 'visible', timeout: 10000 });
+  await this.emailRow.click();
+  await this.attachment.hover();   
+  await this.downloadedButton.click()
+}
 
 
-    constructor(page) {
-      this.page = page;
-      this.getSuggestEmail = page.locator('.GCSDBRWBCM > a');
-      this.getSubjectField = page.locator('#mailSubject');
-      this.getAttachment = page.locator('text=example.txt');
-      this.getMailSendButton = page.locator('#mailSend');
-      this.getRefreshMail = page.locator('[title="Refresh"]');
-      this.getMailTitle = page.locator('div.listSubject');
-      this.getAttachmentArrow = page.locator('.GCSDBRWBN a b');
-      this.getSaveLink = page.locator("xpath=.//span[text()='Save in Documents']");
-      this.getDocumentFolder = page.locator("xpath=.//div[text()='My documents']");
-      this.getSaveButton = page.locator('#dialBtn_OK');
-      this.getMailIcon = page.locator('.icon24-Message');
-      this.getDeleteIcon = page.locator('[title="To Trash"]');
-      this.getEmptyMailText = page.locator('text=Your inbox is empty');
-    }
+  async saveToDocuments() {
+        const [download] = await Promise.all([
+          await this.page.waitForEvent('download'), // Wait for the download to start
+          await this.downloadedButton.click()         // Trigger the download
+        ]);
 
-     /**
-     * Fill email field
-     * @returns {Promise<void>}
-     */
-    async fillEmailField(email) {
-      const emailField = this.page.locator('#mailTo > .GCSDBRWBPL');
-      
-      // Wait for the email field to be visible
-      await emailField.waitFor();
-      
-      // Fill the email field
-      await emailField.fill(email);
-    }
+        // Save to a specific path (optional)
+        const suggestedFilename = download.suggestedFilename();
+        await download.saveAs(`downloads/${suggestedFilename}`);
 
-    /**
-     * Check Attachment is visible
-     * @returns {Promise<void>}
-     */
-    async visibleAttachment() {
-      const attachment = this.page.locator('text=example.txt');
-      // await attachment.waitFor({ state: 'visible', timeout: this.timeout });
-      await expect(attachment, 'Attachment should be Visible').toBeVisible();
-  
-    }
+        // Check if the file exists (Node.js fs)
+        const fs = require('fs');
+        const filePath = `downloads/${suggestedFilename}`;
 
-    /**
-     * Click save button
-     * @returns {Promise<void>}
-     */
-    async clickSaveButton() {
-      const saveButton = this.page.locator('#dialBtn_OK');
-      await expect(saveButton, 'button should be Visible').toBeVisible();
-      await saveButton.click();
-  
-    }
-
+        if (fs.existsSync(filePath)) {
+          console.log('✅ File was downloaded:', filePath);
+        } 
+  }
 }
 
 module.exports = { MailPage };

@@ -1,12 +1,16 @@
 // environment.js
 
 require('dotenv').config();
+console.log('Loaded environment variables from environment.js:', {
+  username: process.env.APP_USERNAME,
+  password: process.env.APP_PASSWORD
+});
 
-function getCredentials() {
-    const username = process.env.USERNAME;
-    const password = process.env.PASSWORD;
-    return { username, password };
-}
+module.exports = () => {
+  return {
+    username: process.env.APP_USERNAME,
+    password: process.env.APP_PASSWORD
+  };
+};
 
-module.exports = getCredentials;
 

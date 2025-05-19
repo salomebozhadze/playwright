@@ -1,5 +1,6 @@
 // @ts-check
 const { defineConfig, devices } = require('@playwright/test');
+import 'dotenv/config';
 
 const config = {
 
