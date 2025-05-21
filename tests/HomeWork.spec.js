@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-dotenv.config(); // Load .env immediately and FIRST
+dotenv.config();
 
 import { test, expect } from '@playwright/test';
 const { LoginPage } = require('../pageobjects/LoginPage');

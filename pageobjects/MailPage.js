@@ -34,8 +34,8 @@ class MailPage {
 
   async saveToDocuments() {
         const [download] = await Promise.all([
-          await this.page.waitForEvent('download'), // Wait for the download to start
-          await this.downloadedButton.click()         // Trigger the download
+          await this.page.waitForEvent('download'),
+          await this.downloadedButton.click()       
         ]);
 
         // Save to a specific path (optional)

@@ -1,5 +1,3 @@
-// environment.js
-
 require('dotenv').config();
 console.log('Loaded environment variables from environment.js:', {
   username: process.env.APP_USERNAME,

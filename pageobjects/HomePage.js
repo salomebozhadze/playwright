@@ -6,8 +6,6 @@ class HomePage {
 
     async getEditBox() {
       const editBox = this.page.locator('input[name="name"]:nth-child(2)');
-      
-      // Wait for the email field to be visible
       await editBox.waitFor();
     }
 
