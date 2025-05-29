@@ -7,7 +7,7 @@ class LoginPage {
   }
 
   async login(username, password) {
-    await this.page.goto('https://mail.google.com/');
+    await this.page.goto('/');
     await this.emailField.fill(username);
     await this.nextBtn.click();
     await this.passwordField.waitFor();

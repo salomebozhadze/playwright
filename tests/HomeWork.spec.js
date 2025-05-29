@@ -1,17 +1,14 @@
-import dotenv from 'dotenv';
-dotenv.config();
+const path = require('path');
+const { test, expect } = require('@playwright/test');
+const { generateTestFile, deleteFile } = require('../utils/fileGenerator');
 
-import { test, expect } from '@playwright/test';
 const { LoginPage } = require('../pageobjects/LoginPage');
-const getCredentials = require('../utils/environment');
+const getCredentials = require('../helper/environment');
 const { MailPage } = require('../pageobjects/MailPage');
 const { DocumentPage } = require('../pageobjects/DocumentPage');
-import data from '../utils/example.json' assert { type: 'json' };
-
 
 let loginPage, mailPage, documentPage;
-let username, password; 
-
+let username, password;
 
 test.beforeEach(async ({ page }) => {
   ({ username, password } = getCredentials());
@@ -20,25 +17,18 @@ test.beforeEach(async ({ page }) => {
   mailPage = new MailPage(page);
   documentPage = new DocumentPage(page);
 
-  console.log('Before hook started');
-  console.log('Fixture loaded:', JSON.stringify(data, null, " "));
-  console.log('Before hook completed');
-
   await loginPage.login(username, password);
-
 });
 
-test('Send file to self and move to Trash', async ({ page }) => {
+test('Send generated .exe file and verify download', async ({ page }) => {
+  const { filename, filePath } = generateTestFile();
 
-  await mailPage.sendMailToSelf(username, './utils/example.txt');
-  await mailPage.openReceivedEmail('Test Email with Attachment');
+  await mailPage.sendMailToSelf(username, filePath);
+  await mailPage.openReceivedEmail(filename); // Pass filename here
   await mailPage.saveToDocuments();
 
   await documentPage.deleteIncomeEmails();
 
+  deleteFile(filePath);
+  deleteFile(`downloads/${filename}`);
 });
-
-test.afterEach(async ({page}) => {
-  await documentPage.clearTrash();
-
-})

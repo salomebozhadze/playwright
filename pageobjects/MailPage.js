@@ -6,11 +6,9 @@ class MailPage {
     this.subjectField = page.locator('input[name="subjectbox"]');
     this.attachmentInput = page.locator('input[type="file"]:not([disabled])');
     this.sendBtn = page.locator('div[role="button"][aria-label^="Send"]').first();
-    this.attachment = page.locator('span.aV3', { hasText: 'example.txt' }).first();
     this.emailRow = this.page.locator('tr[role="row"]', {
       hasText: 'Test Email with Attachment'
     }).first();
-    this.downloadedButton = this.page.getByRole('button', { name: 'Download attachment example.txt' })
   }
 
   async sendMailToSelf(email, filePath) {
@@ -21,34 +19,36 @@ class MailPage {
     await this.page.waitForTimeout(3000);
     await this.sendBtn.click();
     await this.page.waitForTimeout(3000);
-
   }
 
-  async openReceivedEmail() {
-  await this.emailRow.waitFor({ state: 'visible', timeout: 10000 });
-  await this.emailRow.click();
-  await this.attachment.hover();   
-  await this.downloadedButton.click()
-}
+  async openReceivedEmail(filename) {
+    await this.emailRow.waitFor({ state: 'visible', timeout: 10000 });
+    await this.emailRow.click();
 
+    // Dynamically locate attachment and download button using filename
+    this.attachment = this.page.locator('span.aV3', { hasText: filename }).first();
+    this.downloadedButton = this.page.getByRole('button', {
+      name: `Download attachment ${filename}`
+    });
+
+    await this.attachment.hover();
+    await this.downloadedButton.click();
+  }
 
   async saveToDocuments() {
-        const [download] = await Promise.all([
-          await this.page.waitForEvent('download'),
-          await this.downloadedButton.click()       
-        ]);
+    const [download] = await Promise.all([
+      this.page.waitForEvent('download'),
+      this.downloadedButton.click()
+    ]);
 
-        // Save to a specific path (optional)
-        const suggestedFilename = download.suggestedFilename();
-        await download.saveAs(`downloads/${suggestedFilename}`);
+    const suggestedFilename = download.suggestedFilename();
+    const filePath = `downloads/${suggestedFilename}`;
+    await download.saveAs(filePath);
 
-        // Check if the file exists (Node.js fs)
-        const fs = require('fs');
-        const filePath = `downloads/${suggestedFilename}`;
-
-        if (fs.existsSync(filePath)) {
-          console.log('✅ File was downloaded:', filePath);
-        } 
+    const fs = require('fs');
+    if (fs.existsSync(filePath)) {
+      console.log('✅ File was downloaded:', filePath);
+    }
   }
 }
 

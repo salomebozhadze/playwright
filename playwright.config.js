@@ -1,4 +1,3 @@
-// @ts-check
 const { defineConfig, devices } = require('@playwright/test');
 import 'dotenv/config';
 
@@ -12,6 +11,7 @@ const config = {
   },
   reporter: 'html',
   use: {
+    baseURL: 'https://mail.google.com',
     browserName: 'chromium',
     headless: false,
     screenshot: 'on',
