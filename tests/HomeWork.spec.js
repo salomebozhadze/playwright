@@ -24,7 +24,7 @@ test('Send generated .exe file and verify download', async ({ page }) => {
   const { filename, filePath } = generateTestFile();
 
   await mailPage.sendMailToSelf(username, filePath);
-  await mailPage.openReceivedEmail(filename); // Pass filename here
+  await mailPage.openReceivedEmail(filename);
   await mailPage.saveToDocuments();
 
   await documentPage.deleteIncomeEmails();

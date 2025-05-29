@@ -1,20 +1,19 @@
 const fs = require('fs');
 const path = require('path');
-const { faker } = require('@faker-js/faker');
+const { generateFakeName, generateFakeFileName } = require('../helper/fakeData');
 
 function generateTestFile() {
-  const baseName = faker.string.alphanumeric(8); 
-  const randomName = `${baseName}.txt`;
-  const content = `Fake message from ${faker.person.fullName()} at ${faker.internet.email()}`;
+  const name = generateFakeName();
+  const fileName = generateFakeFileName();
+  const content = `Fake message from ${name} at ${fileName}`;
   const fileDir = path.resolve(__dirname);
-  const filePath = path.join(fileDir, randomName);
+  const filePath = path.join(fileDir, fileName);
 
   fs.writeFileSync(filePath, content);
   console.log(`📄 File created: ${filePath}`);
 
-  return { filename: randomName, filePath };
+  return { filename: fileName, filePath };
 }
-
 
 function deleteFile(filePath) {
   if (fs.existsSync(filePath)) {

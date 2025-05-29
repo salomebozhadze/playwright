@@ -1,3 +1,6 @@
+const { generateFakeName } = require('../helper/fakeData');
+const name = generateFakeName();
+
 class MailPage {
   constructor(page) {
     this.page = page;
@@ -7,14 +10,14 @@ class MailPage {
     this.attachmentInput = page.locator('input[type="file"]:not([disabled])');
     this.sendBtn = page.locator('div[role="button"][aria-label^="Send"]').first();
     this.emailRow = this.page.locator('tr[role="row"]', {
-      hasText: 'Test Email with Attachment'
+      hasText: name
     }).first();
   }
 
   async sendMailToSelf(email, filePath) {
     await this.composeBtn.click();
     await this.toField.fill(email);
-    await this.subjectField.fill('Test Email with Attachment');
+    await this.subjectField.fill(name);
     await this.attachmentInput.setInputFiles(filePath);
     await this.page.waitForTimeout(3000);
     await this.sendBtn.click();
@@ -24,8 +27,6 @@ class MailPage {
   async openReceivedEmail(filename) {
     await this.emailRow.waitFor({ state: 'visible', timeout: 10000 });
     await this.emailRow.click();
-
-    // Dynamically locate attachment and download button using filename
     this.attachment = this.page.locator('span.aV3', { hasText: filename }).first();
     this.downloadedButton = this.page.getByRole('button', {
       name: `Download attachment ${filename}`
