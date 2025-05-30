@@ -1,11 +1,11 @@
 const path = require('path');
 const { test, expect } = require('@playwright/test');
-const { generateTestFile, deleteFile } = require('../utils/fileGenerator');
+const { generateTestFile, deleteFile } = require('../utils/file-generator');
 
-const { LoginPage } = require('../pageobjects/LoginPage');
+const { LoginPage } = require('../pageobjects/login-page');
 const getCredentials = require('../helper/environment');
-const { MailPage } = require('../pageobjects/MailPage');
-const { DocumentPage } = require('../pageobjects/DocumentPage');
+const { MailPage } = require('../pageobjects/mail-page');
+const { DocumentPage } = require('../pageobjects/document-page');
 
 let loginPage, mailPage, documentPage;
 let username, password;

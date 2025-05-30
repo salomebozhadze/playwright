@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { generateFakeName, generateFakeFileName } = require('../helper/fakeData');
+const { generateFakeName, generateFakeFileName } = require('../helper/fake-data');
 
 function generateTestFile() {
   const name = generateFakeName();

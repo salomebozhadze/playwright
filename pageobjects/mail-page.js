@@ -1,4 +1,4 @@
-const { generateFakeName } = require('../helper/fakeData');
+const { generateFakeName } = require('../helper/fake-data');
 const name = generateFakeName();
 
 class MailPage {
